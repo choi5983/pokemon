@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pokemon Game</title>
+
+<style type="text/css">
+	* {
+		margin:0px;
+		padding:0px;
+	}
+	body{
+		background-color:black;
+	}
+	div.row{
+		height:16px;
+	}
+	#world .row div{
+		width:16px;
+		height:16px;
+		display:inline-block;
+	}		
+
+	.gravel{
+		background: url("sprite.jpg") -85px 0px;
+	} 
+	.grass{
+		background: url("sprite.jpg") -51px -51px;
+	}
+	.ice{
+		background: url("sprite.jpg") -68px -238px;
+	}
+	.bush{
+		background: url("sprite.jpg") -34px -17px;
+	}
+	.rock{
+		background: url("sprite.jpg") -85px -68px;
+	}
+	.flower{
+		background: url("sprite.jpg") -272px 0px;
+	}
+	#chr{
+		position:absolute;
+		background: url("chr.png") -0px 0px;
+		width:32px;
+		height:32px;
+		top:128px;
+		left:128px;
+	}
+
+</style>
+</head>
+<body>
+
+	<div id='world'>
+
+	</div>
+	<div id='chr'></div>
+
+
+	<script>
+
+		mapping = {
+			0: ['gravel', 5],
+			1: ['flower', 5],
+			2: ['rock', 5],
+			3: ['grass', 80],
+			4: ['ice', 2],
+			5: ['bush', 5],
+			'length': 6
+		}
+
+		chr = {
+			x: 20,
+			y: 20
+		}
+
+		var world = [];
+
+		function createWorld(){
+			console.log('hello')
+			total = 0;
+			for(var i=0; i<mapping.length; i++){
+				total += mapping[i][1];
+			}
+			console.log('total', total);
+			
+			for(var j=0; j<300; j++)
+			{
+				row = [];	
+				for(var i=0; i<300; i++)
+				{
+					//get a random number up to total
+					x = Math.floor(Math.random()*total);
+
+					for(var k=0; k<mapping.length; k++){
+						x = x - mapping[k][1];
+						if(x<0){
+							y = k;
+							break;
+						}
+					}
+					row.push(y);
+				}
+				world.push(row);
+			}
+			console.log(world);
+		}
+
+		function displayWorld(){
+			var html_output = '';
+
+			for(var i=chr.y-10; i<chr.y+10; i++){
+			html_output += "<div class='row'>";
+
+				for(var j=chr.x-10; j<chr.x+10; j++){
+					html_output += "<div class='"+mapping[world[i][j]][0]+"'></div>";
+
+				}
+			html_output += "</div>";
+			}
+			document.getElementById('world').innerHTML = html_output;
+		}
+
+		createWorld();
+		displayWorld();
+
+		document.onkeydown = function(e) {
+			if(e.keyCode == 39){
+				chr.x++;
+			}
+			else if(e.keyCode == 37){
+				chr.x--;
+			}
+			else if(e.keyCode == 38){
+				chr.y--;
+			}
+			else if(e.keyCode == 40){
+				chr.y++;
+			}
+			displayWorld();
+
+		}
+
+	</script>
+
+</body>
+</html>
